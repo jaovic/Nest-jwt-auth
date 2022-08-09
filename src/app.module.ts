@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { RepositoryModule } from './repository/repository.module';
+import { TesteModule } from './teste/teste.module';
 
 @Module({
   imports: [
@@ -9,6 +10,7 @@ import { RepositoryModule } from './repository/repository.module';
     RepositoryModule,
     AuthModule,
     RepositoryModule,
+    TesteModule,
   ],
   controllers: [],
   providers: [],
