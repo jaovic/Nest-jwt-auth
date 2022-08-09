@@ -22,9 +22,18 @@ export class AuthService {
   }
   async login(user) {
     const payload = { sub: user.id, email: user.email };
-    return {
+    const tokens = {
       token: this.jwtService.sign(payload),
+      refreshToken: this.jwtService.sign(payload, {
+        secret: process.env.REFRESH_TOKEN_SECRET,
+        expiresIn: '15m',
+      }),
     };
+    (await this.repositoryService.updateRefreshToken(
+      user.id,
+      tokens.refreshToken,
+    )) && this.repositoryService.updateToken(user.id, tokens.token);
+    return tokens;
   }
   async validateUser(email: string, password: string) {
     let user;

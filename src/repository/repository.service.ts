@@ -55,7 +55,7 @@ export class RepositoryService {
   }
   async updateRefreshToken(id: string, refreshToken: string) {
     try {
-      return await prisma.user.update({
+      return await prisma.user.updateMany({
         where: {
           id,
         },
@@ -68,7 +68,7 @@ export class RepositoryService {
 
   async updateToken(id: string, token: string) {
     try {
-      return await prisma.user.update({
+      return await prisma.user.updateMany({
         where: { id },
         data: { token },
       });
