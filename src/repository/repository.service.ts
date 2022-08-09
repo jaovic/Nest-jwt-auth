@@ -44,6 +44,7 @@ export class RepositoryService {
       throw new Error(`Prisma Error: ${error}`);
     }
   }
+
   async findByRefreshToken(refreshToken: string) {
     try {
       return await prisma.user.findUnique({
@@ -53,6 +54,7 @@ export class RepositoryService {
       throw new Error(`Prisma Error: ${error}`);
     }
   }
+
   async updateRefreshToken(id: string, refreshToken: string) {
     try {
       return await prisma.user.updateMany({
@@ -76,17 +78,18 @@ export class RepositoryService {
       throw new Error(`Prisma Error: ${error}`);
     }
   }
+
   async logout(userId: string) {
     try {
       await prisma.user.updateMany({
         where: {
           id: userId,
           Refresh_Token: {
-            not: null,
+            not: 'null',
           },
         },
         data: {
-          Refresh_Token: null,
+          Refresh_Token: 'null',
         },
       });
       return true;

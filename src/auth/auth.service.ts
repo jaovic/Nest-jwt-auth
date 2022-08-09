@@ -10,18 +10,23 @@ export class AuthService {
     private readonly repositoryService: RepositoryService,
     private readonly jwtService: JwtService,
   ) {}
+
   async create(createAuthDto: SingUpAuthDto) {
     const user = await this.repositoryService.findByEmail(createAuthDto.email);
+
     if (user) {
       throw new HttpException(
         'User already exists',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+
     return await this.repositoryService.create(createAuthDto);
   }
+
   async login(user) {
-    const payload = { sub: user.id, email: user.email };
+    const data = await this.repositoryService.findByEmail(user.email);
+    const payload = { sub: data.id, email: user.email };
     const tokens = {
       token: this.jwtService.sign(payload),
       refreshToken: this.jwtService.sign(payload, {
@@ -29,12 +34,19 @@ export class AuthService {
         expiresIn: '15m',
       }),
     };
+
     (await this.repositoryService.updateRefreshToken(
       user.id,
       tokens.refreshToken,
     )) && this.repositoryService.updateToken(user.id, tokens.token);
+
     return tokens;
   }
+
+  async logout(id: string) {
+    return await this.repositoryService.logout(id);
+  }
+
   async validateUser(email: string, password: string) {
     let user;
     try {

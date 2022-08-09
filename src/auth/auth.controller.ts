@@ -18,4 +18,10 @@ export class AuthController {
   async login(@Body() body: LoginAuthDto) {
     return await this.authService.login(body);
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post('logout')
+  async logout(@Req() req: any) {
+    return await this.authService.logout(req.user.id);
+  }
 }
