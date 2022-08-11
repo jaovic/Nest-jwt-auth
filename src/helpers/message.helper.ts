@@ -9,4 +9,6 @@ export const MessagesHelper = {
   CPF_REQUIRED: 'CPF is required',
   CPF_INVALID: 'CPF is invalid',
   PASSWORD_OR_EMAIL_INVALID: 'Password or email is invalid',
+  PHONE_REQUIRED: 'Phone is required',
+  PHONE_INVALID: 'Phone is invalid',
 };
