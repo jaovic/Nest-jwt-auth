@@ -1,4 +1,3 @@
-import { AuthService } from './../auth/auth.service';
 import client from 'twilio';
 
 export class SmsService {
