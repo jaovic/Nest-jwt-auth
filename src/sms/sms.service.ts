@@ -6,7 +6,6 @@ export class SmsService {
     process.env.TWILIO_ACCOUNT_SID,
     process.env.TWILIO_AUTH_TOKEN,
   );
-  constructor(private readonly authService: AuthService) {}
   async sendSms(to: string, code: string) {
     return await this.client.messages.create({
       body: `your code is: ${code}`,
