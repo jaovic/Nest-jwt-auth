@@ -19,4 +19,6 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Refresh_Token String @unique @default("null")
+  isVerified Boolean @default(false)
+  code String @default("null")
 }
