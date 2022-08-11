@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { TesteService } from './teste.service';
 
@@ -18,8 +12,7 @@ export class TesteController {
   }
   @UseGuards(AuthGuard('jwt'))
   @Get('teste')
-  @HttpCode(HttpStatus.OK)
-  async getTeste() {
-    return await this.testeService.teste();
+  async getTeste(@Req() req: any) {
+    return await this.testeService.teste(req);
   }
 }
