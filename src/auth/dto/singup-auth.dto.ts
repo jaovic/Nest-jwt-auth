@@ -17,4 +17,7 @@ export class SingUpAuthDto {
   @IsNotEmpty({ message: MessagesHelper.CPF_REQUIRED })
   @Matches(regexHelper.cpf, { message: MessagesHelper.CPF_INVALID })
   cpf: string;
+  @IsNotEmpty({ message: MessagesHelper.PHONE_REQUIRED })
+  @Matches(regexHelper.phone, { message: MessagesHelper.PHONE_INVALID })
+  phone: string;
 }
