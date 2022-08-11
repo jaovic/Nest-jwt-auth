@@ -47,6 +47,31 @@ export class AuthService {
     return await this.repositoryService.logout(id);
   }
 
+  async refreshToken(req: any) {
+    const user = await this.repositoryService.findByRefreshToken(
+      req.headers.authorization.split(' ')[1],
+    );
+    if (!user) {
+      throw new HttpException(
+        'Invalid refresh token',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    const payload = { sub: user.id, email: user.email };
+    const tokens = {
+      token: this.jwtService.sign(payload),
+      refreshToken: this.jwtService.sign(payload, {
+        secret: process.env.REFRESH_TOKEN_SECRET,
+        expiresIn: '15m',
+      }),
+    };
+    (await this.repositoryService.updateRefreshToken(
+      user.id,
+      tokens.refreshToken,
+    )) && this.repositoryService.updateToken(user.id, tokens.token);
+    return tokens;
+  }
+
   async validateUser(email: string, password: string) {
     let user;
     try {

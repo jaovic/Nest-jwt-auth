@@ -1,5 +1,5 @@
 import { AuthService } from './auth.service';
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { SingUpAuthDto } from './dto/singup-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
@@ -23,5 +23,10 @@ export class AuthController {
   @Post('logout')
   async logout(@Req() req: any) {
     return await this.authService.logout(req.user.id);
+  }
+
+  @Get('refreshtoken')
+  async refreshToken(@Req() req: any) {
+    return await this.authService.refreshToken(req);
   }
 }
