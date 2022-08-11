@@ -24,23 +24,9 @@ export class AuthService {
     return await this.repositoryService.create(createAuthDto);
   }
 
-  async login(user) {
+  async login(user: any) {
     const data = await this.repositoryService.findByEmail(user.email);
-    const payload = { sub: data.id, email: user.email };
-    const tokens = {
-      token: this.jwtService.sign(payload),
-      refreshToken: this.jwtService.sign(payload, {
-        secret: process.env.REFRESH_TOKEN_SECRET,
-        expiresIn: '15m',
-      }),
-    };
-
-    (await this.repositoryService.updateRefreshToken(
-      user.id,
-      tokens.refreshToken,
-    )) && this.repositoryService.updateToken(user.id, tokens.token);
-
-    return tokens;
+    return await this.GetTokens(data.id, data.email);
   }
 
   async logout(id: string) {
@@ -57,19 +43,7 @@ export class AuthService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-    const payload = { sub: user.id, email: user.email };
-    const tokens = {
-      token: this.jwtService.sign(payload),
-      refreshToken: this.jwtService.sign(payload, {
-        secret: process.env.REFRESH_TOKEN_SECRET,
-        expiresIn: '15m',
-      }),
-    };
-    (await this.repositoryService.updateRefreshToken(
-      user.id,
-      tokens.refreshToken,
-    )) && this.repositoryService.updateToken(user.id, tokens.token);
-    return tokens;
+    return await this.GetTokens(user.id, user.email);
   }
 
   async validateUser(email: string, password: string) {
@@ -82,5 +56,19 @@ export class AuthService {
     const isValid = bcrypt.compare(password, user.password);
     if (!isValid) return null;
     return true;
+  }
+
+  async GetTokens(id: string, email: string) {
+    const payload = { sub: id, email: email };
+    const [token, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(payload),
+      this.jwtService.signAsync(payload, {
+        secret: process.env.REFRESH_TOKEN_SECRET,
+        expiresIn: '15m',
+      }),
+    ]);
+    await this.repositoryService.updateRefreshToken(id, refreshToken);
+    await this.repositoryService.updateToken(id, token);
+    return { token, refreshToken };
   }
 }
