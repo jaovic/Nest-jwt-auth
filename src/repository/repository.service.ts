@@ -92,6 +92,17 @@ export class RepositoryService {
           Refresh_Token: 'null',
         },
       });
+      await prisma.user.updateMany({
+        where: {
+          id: userId,
+          token: {
+            not: 'null',
+          },
+        },
+        data: {
+          token: 'null',
+        },
+      });
       return true;
     } catch (error) {
       throw new Error(`Prisma Error: ${error}`);
