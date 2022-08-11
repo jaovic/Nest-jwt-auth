@@ -10,8 +10,7 @@ export class SingUpAuthDto {
   email: string;
   @IsNotEmpty({ message: MessagesHelper.PASSWORD_REQUIRED })
   @Matches(regexHelper.password, {
-    message:
-      'The password must contain uppercase and lowercase letters, numbers and special characters',
+    message: MessagesHelper.PASSWORD_VALID,
   })
   password: string;
   @IsNotEmpty({ message: MessagesHelper.CPF_REQUIRED })
