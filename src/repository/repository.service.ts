@@ -108,4 +108,35 @@ export class RepositoryService {
       throw new Error(`Prisma Error: ${error}`);
     }
   }
+
+  async saveCode(id: string, code: string) {
+    try {
+      return await prisma.user.updateMany({
+        where: {
+          id,
+        },
+        data: {
+          code,
+        },
+      });
+    } catch (error) {
+      throw new Error(`Prisma Error: ${error}`);
+    }
+  }
+
+  async verifyCode(id: string) {
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id,
+        },
+      });
+      if (user.code === 'null') {
+        return false;
+      }
+      return true;
+    } catch (error) {
+      throw new Error(`Prisma Error: ${error}`);
+    }
+  }
 }
