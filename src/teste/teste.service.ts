@@ -1,5 +1,5 @@
 import { RepositoryService } from './../repository/repository.service';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class TesteService {
@@ -8,10 +8,10 @@ export class TesteService {
     const { id } = req.user;
     const data = await this.repositoryService.findById(id);
     if (data.Refresh_Token === 'null') {
-      return {
-        message: 'Token invalido',
-        status: false,
-      };
+      throw new HttpException(
+        'Invalid token',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
     return data;
   }
