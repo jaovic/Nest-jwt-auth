@@ -17,6 +17,7 @@ export class RepositoryService {
           email: createAuthDto.email,
           password: createAuthDto.password,
           cpf: createAuthDto.cpf,
+          phone: createAuthDto.phone,
         },
       });
       delete user.password &&
@@ -134,7 +135,7 @@ export class RepositoryService {
           id,
         },
       });
-      if (user.code === 'null') {
+      if (user.isVerified === false) {
         return false;
       }
       return true;
