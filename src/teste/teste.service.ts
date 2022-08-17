@@ -8,10 +8,7 @@ export class TesteService {
     const { id } = req.user;
     const data = await this.repositoryService.findById(id);
     if (data.Refresh_Token === 'null') {
-      throw new HttpException(
-        'Invalid token',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
     }
     return data;
   }
