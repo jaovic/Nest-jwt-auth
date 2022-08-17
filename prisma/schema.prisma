@@ -21,5 +21,6 @@ model User {
   updatedAt DateTime @updatedAt
   Refresh_Token String @unique @default("null")
   isVerified Boolean @default(false)
-  code String @default("null")
+  codeSms String @default("null")
+  codeEmail String @default("null")
 }
