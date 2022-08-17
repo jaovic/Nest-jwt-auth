@@ -23,7 +23,8 @@ export class RepositoryService {
       delete user.password &&
         delete user.token &&
         delete user.Refresh_Token &&
-        delete user.code;
+        delete user.codeSms &&
+        delete user.codeEmail;
       return user;
     } catch (error: any) {
       throw new Error(error);
@@ -120,7 +121,8 @@ export class RepositoryService {
           id,
         },
         data: {
-          code,
+          codeSms: code,
+          codeEmail: code,
         },
       });
     } catch (error) {
@@ -151,7 +153,8 @@ export class RepositoryService {
           id,
         },
         data: {
-          code: 'verificated',
+          codeSms: 'verificated',
+          codeEmail: 'verificated',
           isVerified: true,
         },
       });
