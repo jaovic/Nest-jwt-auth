@@ -1,3 +1,4 @@
+import { verifyCodeAuthDto } from './dto/verifyCode.dto';
 import { AuthService } from './auth.service';
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -28,5 +29,10 @@ export class AuthController {
   @Get('refreshtoken')
   async refreshToken(@Req() req: any) {
     return await this.authService.refreshToken(req);
+  }
+
+  @Post('verify')
+  async verifyCode(@Body() body: verifyCodeAuthDto) {
+    return await this.authService.verifyCode(body.email, body.code);
   }
 }

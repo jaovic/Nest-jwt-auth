@@ -1,3 +1,5 @@
+import { SmsService } from 'src/sms/sms.service';
+import { SmsModule } from './../sms/sms.module';
 import { RepositoryModule } from './../repository/repository.module';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { localStrategy } from './strategies/local.strategy';
@@ -12,6 +14,7 @@ import { AuthController } from './auth.controller';
   imports: [
     ConfigModule.forRoot(),
     RepositoryModule,
+    SmsModule,
     PassportModule,
     JwtModule.register({
       privateKey: process.env.TOKEN_SECRET,
@@ -19,6 +22,6 @@ import { AuthController } from './auth.controller';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, localStrategy, JwtStrategy],
+  providers: [AuthService, localStrategy, JwtStrategy, SmsService],
 })
 export class AuthModule {}

@@ -11,7 +11,7 @@ export class AuthService {
   constructor(
     private readonly repositoryService: RepositoryService,
     private readonly jwtService: JwtService,
-    private readonly SmsService: SmsService,
+    private readonly smsService: SmsService,
   ) {}
 
   async create(createAuthDto: SingUpAuthDto) {
@@ -26,7 +26,7 @@ export class AuthService {
     const code = Math.floor(Math.random() * 9000) + 1000;
     const data = await this.repositoryService.create(createAuthDto);
     await this.repositoryService.saveCode(data.id, code.toString());
-    await this.SmsService.sendSms(createAuthDto.phone, code.toString());
+    await this.smsService.sendSms(createAuthDto.phone, code.toString());
 
     return data;
   }
@@ -84,5 +84,17 @@ export class AuthService {
     await this.repositoryService.updateRefreshToken(id, refreshToken);
     await this.repositoryService.updateToken(id, token);
     return { token, refreshToken };
+  }
+
+  async verifyCode(email: string, code: string) {
+    const user = await this.repositoryService.findByEmail(email);
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    if (user.code !== code) {
+      throw new HttpException('Code not verified', HttpStatus.NOT_FOUND);
+    }
+    await this.repositoryService.updateCode(user.id);
+    return true;
   }
 }
