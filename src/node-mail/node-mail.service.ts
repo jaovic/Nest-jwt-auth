@@ -8,7 +8,7 @@ export class NodeMailService {
     port: process.env.PORT,
     secure: false,
     auth: {
-      user: process.env.USER,
+      user: process.env.EMAIL,
       pass: process.env.PASSWORD,
     },
     tls: {
@@ -16,7 +16,7 @@ export class NodeMailService {
     },
   });
   async sendMail(to: string, code: string) {
-    const mailSend = this.transporter.sendMail({
+    const mailSend = await this.transporter.sendMail({
       text: `your code is: ${code}`,
       subject: 'Code',
       from: 'api Auth <constateste996@gmail.com>',
