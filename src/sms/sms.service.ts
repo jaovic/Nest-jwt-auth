@@ -1,4 +1,4 @@
-import client from 'twilio';
+import * as client from 'twilio';
 
 export class SmsService {
   private readonly client = client(
