@@ -19,7 +19,10 @@ export class RepositoryService {
           cpf: createAuthDto.cpf,
         },
       });
-      delete user.password && delete user.token && delete user.Refresh_Token;
+      delete user.password &&
+        delete user.token &&
+        delete user.Refresh_Token &&
+        delete user.code;
       return user;
     } catch (error: any) {
       throw new Error(error);
@@ -135,6 +138,22 @@ export class RepositoryService {
         return false;
       }
       return true;
+    } catch (error) {
+      throw new Error(`Prisma Error: ${error}`);
+    }
+  }
+
+  async updateCode(id: string) {
+    try {
+      return await prisma.user.updateMany({
+        where: {
+          id,
+        },
+        data: {
+          code: 'verificated',
+          isVerified: true,
+        },
+      });
     } catch (error) {
       throw new Error(`Prisma Error: ${error}`);
     }
