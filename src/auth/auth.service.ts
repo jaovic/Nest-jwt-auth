@@ -40,7 +40,7 @@ export class AuthService {
     }
     const isVerified = await this.repositoryService.verifyCode(data.id);
     if (!isVerified) {
-      throw new HttpException('Code not verified', HttpStatus.NOT_FOUND);
+      throw new HttpException('Code not verified', HttpStatus.UNAUTHORIZED);
     }
     return await this.GetTokens(data.id, data.email);
   }
@@ -54,10 +54,7 @@ export class AuthService {
       req.headers.authorization.split(' ')[1],
     );
     if (!user) {
-      throw new HttpException(
-        'Invalid refresh token',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException('Invalid refresh token', HttpStatus.UNAUTHORIZED);
     }
     return await this.GetTokens(user.id, user.email);
   }
@@ -94,7 +91,7 @@ export class AuthService {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
     if (user.codeSms !== code && user.codeEmail !== code) {
-      throw new HttpException('Code not verified', HttpStatus.NOT_FOUND);
+      throw new HttpException('Code not verified', HttpStatus.UNAUTHORIZED);
     }
     await this.repositoryService.updateCode(user.id);
     return true;
