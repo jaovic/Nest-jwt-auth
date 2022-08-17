@@ -11,4 +11,5 @@ export const MessagesHelper = {
   PASSWORD_OR_EMAIL_INVALID: 'Password or email is invalid',
   PHONE_REQUIRED: 'Phone is required',
   PHONE_INVALID: 'Phone is invalid',
+  CODE_REQUIRED: 'Code is required',
 };
