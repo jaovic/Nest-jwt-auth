@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { SingUpAuthDto } from './dto/singup-auth.dto';
 import { RepositoryService } from 'src/repository/repository.service';
 import { SmsService } from './../sms/sms.service';
+import { NodeMailService } from 'src/node-mail/node-mail.service';
 
 import * as bcrypt from 'bcrypt';
 
@@ -12,6 +13,7 @@ export class AuthService {
     private readonly repositoryService: RepositoryService,
     private readonly jwtService: JwtService,
     private readonly smsService: SmsService,
+    private readonly nodemailer: NodeMailService,
   ) {}
 
   async create(createAuthDto: SingUpAuthDto) {
@@ -27,6 +29,7 @@ export class AuthService {
     const data = await this.repositoryService.create(createAuthDto);
     await this.repositoryService.saveCode(data.id, code.toString());
     await this.smsService.sendSms(createAuthDto.phone, code.toString());
+    await this.nodemailer.sendMail(createAuthDto.email, code.toString());
 
     return data;
   }
@@ -91,7 +94,7 @@ export class AuthService {
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
-    if (user.code !== code) {
+    if (user.codeSms !== code && user.codeEmail !== code) {
       throw new HttpException('Code not verified', HttpStatus.NOT_FOUND);
     }
     await this.repositoryService.updateCode(user.id);

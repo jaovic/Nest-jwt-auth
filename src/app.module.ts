@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { RepositoryModule } from './repository/repository.module';
 import { TesteModule } from './teste/teste.module';
 import { SmsModule } from './sms/sms.module';
+import { NodeMailModule } from './node-mail/node-mail.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { SmsModule } from './sms/sms.module';
     RepositoryModule,
     TesteModule,
     SmsModule,
+    NodeMailModule,
   ],
   controllers: [],
   providers: [],
