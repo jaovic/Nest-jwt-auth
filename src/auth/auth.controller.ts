@@ -9,13 +9,13 @@ import { LoginAuthDto } from './dto/login-auth.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('create')
+  @Post('singup')
   async singUp(@Body() body: SingUpAuthDto) {
     return await this.authService.create(body);
   }
 
   @UseGuards(AuthGuard('local'))
-  @Post('singup')
+  @Post('login')
   async login(@Body() body: LoginAuthDto) {
     return await this.authService.login(body);
   }
