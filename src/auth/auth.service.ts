@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { SingUpAuthDto } from './dto/singup-auth.dto';
 import { RepositoryService } from 'src/repository/repository.service';
 import { SmsService } from './../sms/sms.service';
-import { NodeMailService } from 'src/node-mail/node-mail.service';
+// import { NodeMailService } from 'src/node-mail/node-mail.service';
 
 import * as bcrypt from 'bcrypt';
 
@@ -12,8 +12,7 @@ export class AuthService {
   constructor(
     private readonly repositoryService: RepositoryService,
     private readonly jwtService: JwtService,
-    private readonly smsService: SmsService,
-    private readonly nodemailer: NodeMailService,
+    private readonly smsService: SmsService, // private readonly nodemailer: NodeMailService,
   ) {}
 
   async create(createAuthDto: SingUpAuthDto) {
@@ -29,7 +28,7 @@ export class AuthService {
     const data = await this.repositoryService.create(createAuthDto);
     await this.repositoryService.saveCode(data.id, code.toString());
     await this.smsService.sendSms(createAuthDto.phone, code.toString());
-    await this.nodemailer.sendMail(createAuthDto.email, code.toString());
+    // await this.nodemailer.sendMail(createAuthDto.email, code.toString());
 
     return data;
   }
