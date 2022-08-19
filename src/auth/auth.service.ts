@@ -6,6 +6,7 @@ import { SmsService } from './../sms/sms.service';
 // import { NodeMailService } from 'src/node-mail/node-mail.service';
 
 import * as bcrypt from 'bcrypt';
+import { log } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -60,7 +61,21 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string) {
-    let user;
+    let user: {
+      id: string;
+      name: string;
+      phone: string;
+      email: string;
+      password: string;
+      cpf: string;
+      token: string;
+      Refresh_Token: string;
+      isVerified: boolean;
+      codeSms: string;
+      codeEmail: string;
+      createdAt: Date;
+      updatedAt: Date;
+    };
     try {
       user = await this.repositoryService.findByEmail(email);
     } catch (error) {
